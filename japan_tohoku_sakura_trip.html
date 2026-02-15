@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="東北賞櫻">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' style='stop-color:%23ff9a9e'/><stop offset='100%25' style='stop-color:%23fad0c4'/></linearGradient></defs><rect width='100' height='100' fill='url(%23bg)'/><text x='50' y='60' font-size='45' text-anchor='middle' fill='white'>🌸</text></svg>">
+    <title>日本東北賞櫻之旅 2025</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft JhengHei", sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 28px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .header .dates {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 80px;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 15px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            min-height: 400px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .day-card {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255,255,255,0.5);
+        }
+
+        .day-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .day-badge {
+            background: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #ff6b6b;
+        }
+
+        .itinerary-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 12px;
+            align-items: flex-start;
+        }
+
+        .itinerary-icon {
+            font-size: 24px;
+            min-width: 30px;
+        }
+
+        .itinerary-text {
+            flex: 1;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .time-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.7);
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #666;
+            margin-left: 5px;
+        }
+
+        .hotel-card {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .hotel-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .hotel-info {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .transport-card {
+            background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .transport-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .transport-detail {
+            color: #555;
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .map-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+
+        .map-link:hover {
+            color: #764ba2;
+            border-bottom: 2px solid #764ba2;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .tab-btn {
+                font-size: 14px;
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌸 日本東北賞櫻之旅</h1>
+            <div class="dates">2025年4月12日 - 4月18日 (7天6夜)</div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('overview')">總覽</button>
+            <button class="tab-btn" onclick="switchTab('itinerary')">行程</button>
+            <button class="tab-btn" onclick="switchTab('hotels')">住宿</button>
+            <button class="tab-btn" onclick="switchTab('transport')">交通</button>
+            <button class="tab-btn" onclick="switchTab('food')">美食</button>
+        </div>
+
+        <div class="content">
+            <!-- 總覽頁面 -->
+            <div id="overview" class="tab-content active">
+                <div class="section-title">📍 行程概要</div>
+                <div class="info-box">
+                    <strong>旅遊路線：</strong>仙台 → 白石川 → 福島/山形 → 岩手 → 秋田/弘前 → 青森 → 仙台
+                </div>
+                <div class="highlight">
+                    🌸 賞櫻重點景點：<a href="https://maps.google.com/?q=榴岡公園" target="_blank" style="color: white; text-decoration: underline;">榴岡公園</a>、<a href="https://maps.google.com/?q=白石川堤一目千本桜" target="_blank" style="color: white; text-decoration: underline;">白石川一目千本櫻</a>、<a href="https://maps.google.com/?q=花見山公園" target="_blank" style="color: white; text-decoration: underline;">花見山公園</a>、<a href="https://maps.google.com/?q=霞城公園" target="_blank" style="color: white; text-decoration: underline;">霞城公園</a>、<a href="https://maps.google.com/?q=北上展勝地" target="_blank" style="color: white; text-decoration: underline;">北上展勝地</a>、<a href="https://maps.google.com/?q=小岩井農場一本桜" target="_blank" style="color: white; text-decoration: underline;">小岩井農場一本櫻</a>、<a href="https://maps.google.com/?q=弘前公園" target="_blank" style="color: white; text-decoration: underline;">弘前公園</a>
+                </div>
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-title">4/12 (日) Day 1</div>
+                        <div class="day-badge">仙台</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">✈️</div>
+                        <div class="itinerary-text">14:35 抵達仙台機場 → 榴岡公園賞櫻 → 牛舌司</div>
+                    </div>
+                </div>
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-title">4/13 (一) Day 2</div>
+                        <div class="day-badge">白石川</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🌸</div>
+                        <div class="itinerary-text">白石川堤一目千本櫻 → 船岡城址公園 → 牛舌閣</div>
+                    </div>
+                </div>
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-title">4/14 (二) Day 3</div>
+                        <div class="day-badge">福島/山形</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚗</div>
+                        <div class="itinerary-text">花見山公園 → 霞城公園 → 米澤牛登起波</div>
+                    </div>
+                </div>
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-title">4/14 (三) Day 4</div>
+                        <div class="day-badge">岩手</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🌸</div>
+                        <div class="itinerary-text">北上展勝地 → 小岩井農場一本櫻 → 盛岡</div>
+                    </div>
+                </div>
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-title">4/16 (四) Day 5</div>
+                        <div class="day-badge">秋田/弘前</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">❄️</div>
+                        <div class="itinerary-text">八幡平雪之迴廊 → 睡魔村 → 弘前公園</div>
+                    </div>
+                </div>
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-title">4/17 (五) Day 6</div>
+                        <div class="day-badge">青森/仙台</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🎨</div>
+                        <div class="itinerary-text">青森縣立美術館 → 新幹線返回仙台 → 牛舌善治郎</div>
+                    </div>
+                </div>
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-title">4/18 (六) Day 7</div>
+                        <div class="day-badge">返台</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🛍️</div>
+                        <div class="itinerary-text">仙台朝市 → 伴手禮採買 → 16:05 班機起飛</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 行程頁面 -->
+            <div id="itinerary" class="tab-content">
+                <div class="section-title">📅 詳細行程</div>
+                
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-title">4/12 (日) Day 1 - 仙台</div>
+                        <div class="day-badge">電車</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">✈️</div>
+                        <div class="itinerary-text">14:35 抵達仙台機場</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">⬇️</div>
+                        <div class="itinerary-text">電車 <span class="time-badge">25分</span></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">📍</div>
+                        <div class="itinerary-text">仙台車站 Check-in</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🌸</div>
+                        <div class="itinerary-text"><strong><a href="https://maps.google.com/?q=榴岡公園,仙台" target="_blank" class="map-link">榴岡公園</a></strong> | 仙台</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🥩</div>
+                        <div class="itinerary-text"><strong>晚餐：<a href="https://maps.google.com/?q=牛たん司,仙台駅" target="_blank" class="map-link">牛舌司</a></strong>（東口）</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🏨</div>
+                        <div class="itinerary-text">Vista 飯店 仙台</div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-title">4/13 (一) Day 2 - 白石川</div>
+                        <div class="day-badge">電車</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">📍</div>
+                        <div class="itinerary-text">仙台車站出發</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">⬇️</div>
+                        <div class="itinerary-text">JR東北本線 <span class="time-badge">35分</span> (一小時兩班)</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🌸</div>
+                        <div class="itinerary-text"><strong><a href="https://maps.google.com/?q=白石川堤一目千本桜" target="_blank" class="map-link">白石川堤一目千本櫻</a></strong></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🌸</div>
+                        <div class="itinerary-text"><strong><a href="https://maps.google.com/?q=船岡城址公園" target="_blank" class="map-link">船岡城址公園</a></strong></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🥩</div>
+                        <div class="itinerary-text"><strong>晚餐：<a href="https://maps.google.com/?q=牛たん閣,仙台" target="_blank" class="map-link">牛舌閣</a></strong>（找一間分店）</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🏨</div>
+                        <div class="itinerary-text">Vista 飯店 仙台</div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-title">4/14 (二) Day 3 - 福島/山形</div>
+                        <div class="day-badge">租車 D1</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">📍</div>
+                        <div class="itinerary-text">仙台取車</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚗</div>
+                        <div class="itinerary-text"><span class="time-badge">1小時10分</span></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🌸</div>
+                        <div class="itinerary-text"><strong><a href="https://maps.google.com/?q=花見山公園,福島" target="_blank" class="map-link">花見山公園</a></strong> (福島)</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🥪</div>
+                        <div class="itinerary-text">午餐</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚗</div>
+                        <div class="itinerary-text"><span class="time-badge">1.5小時</span></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🌸</div>
+                        <div class="itinerary-text"><strong><a href="https://maps.google.com/?q=霞城公園,山形" target="_blank" class="map-link">霞城公園</a></strong> (山形城)</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🥩</div>
+                        <div class="itinerary-text"><strong>晚餐：<a href="https://maps.google.com/?q=米沢牛登起波,山形" target="_blank" class="map-link">米澤牛 登起波</a></strong> (飯店樓下～21:00)</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🏨</div>
+                        <div class="itinerary-text">山形站前大和 ROYNET 酒店</div>
+                    </div>
+                    <div class="warning-box">
+                        🛑 今日總車程：約 2小時 50分
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-title">4/15 (三) Day 4 - 岩手北上</div>
+                        <div class="day-badge">租車 D2</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">📍</div>
+                        <div class="itinerary-text">山形出發</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚗</div>
+                        <div class="itinerary-text"><span class="time-badge">1小時40分</span> (走高速公路)</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🌸</div>
+                        <div class="itinerary-text"><strong><a href="https://maps.google.com/?q=北上展勝地" target="_blank" class="map-link">北上展勝地</a></strong></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚗</div>
+                        <div class="itinerary-text"><span class="time-badge">45分</span></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🌸</div>
+                        <div class="itinerary-text"><strong><a href="https://maps.google.com/?q=小岩井農場一本桜" target="_blank" class="map-link">小岩井農場一本櫻</a></strong></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚗</div>
+                        <div class="itinerary-text"><span class="time-badge">30分</span></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">📍</div>
+                        <div class="itinerary-text">盛岡市區</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🏨</div>
+                        <div class="itinerary-text">Richmond Hotel 盛岡駅前</div>
+                    </div>
+                    <div class="warning-box">
+                        🛑 今日總車程：約 2小時 55分
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-title">4/16 (四) Day 5 - 秋田弘前</div>
+                        <div class="day-badge">租車 D3 異地還車</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🥣</div>
+                        <div class="itinerary-text">飯店早餐</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚗</div>
+                        <div class="itinerary-text"><span class="time-badge">1小時15分</span> (上山)</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">❄️</div>
+                        <div class="itinerary-text"><strong><a href="https://maps.google.com/?q=八幡平アスピーテライン" target="_blank" class="map-link">八幡平雪之迴廊</a></strong> (Aspite Line)</div>
+                    </div>
+                    <div class="info-box">
+                        ⚠️ 早上出發前查看天氣預報，確認路況
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚗</div>
+                        <div class="itinerary-text"><span class="time-badge">1小時40分</span> (下山往北)</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🔑</div>
+                        <div class="itinerary-text"><a href="https://maps.google.com/?q=Nippon+Rent+a+Car+弘前駅前店" target="_blank" class="map-link">Nippon rent a car 弘前站還車</a></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🏮</div>
+                        <div class="itinerary-text"><strong><a href="https://maps.google.com/?q=津軽藩ねぷた村" target="_blank" class="map-link">睡魔村</a></strong> (～17:00)</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🌸</div>
+                        <div class="itinerary-text"><strong><a href="https://maps.google.com/?q=弘前公園" target="_blank" class="map-link">弘前公園</a></strong> (日本第一櫻)</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🏨</div>
+                        <div class="itinerary-text">天然溫泉 磐城櫻花之湯 Dormy Inn 弘前店</div>
+                    </div>
+                    <div class="warning-box">
+                        🛑 今日總車程：約 2小時 55分
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-title">4/17 (五) Day 6 - 青森/仙台</div>
+                        <div class="day-badge">電車/新幹線</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">📍</div>
+                        <div class="itinerary-text">弘前出發</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚃</div>
+                        <div class="itinerary-text">JR奧羽本線 <span class="time-badge">30分</span></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">📍</div>
+                        <div class="itinerary-text">新青森車站（寄放行李）</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚌</div>
+                        <div class="itinerary-text">公車 <span class="time-badge">15分</span></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🎨</div>
+                        <div class="itinerary-text"><strong><a href="https://maps.google.com/?q=青森県立美術館" target="_blank" class="map-link">青森縣立美術館</a></strong></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🥪</div>
+                        <div class="itinerary-text">午餐</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">📍</div>
+                        <div class="itinerary-text"><a href="https://maps.google.com/?q=新青森駅" target="_blank" class="map-link">新青森車站</a></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚅</div>
+                        <div class="itinerary-text">新幹線 <span class="time-badge">1.5小時</span></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">📍</div>
+                        <div class="itinerary-text"><a href="https://maps.google.com/?q=仙台駅" target="_blank" class="map-link">仙台車站</a></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🥩</div>
+                        <div class="itinerary-text"><strong>晚餐：<a href="https://maps.google.com/?q=牛たん炭焼利久善治郎,仙台駅" target="_blank" class="map-link">牛舌 善治郎</a></strong> (～22:30)</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🏨</div>
+                        <div class="itinerary-text">Daiwa Roynet Hotel Sendai-nishiguchi PREMIER</div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-title">4/18 (六) Day 7 - 返台</div>
+                        <div class="day-badge">電車</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">📍</div>
+                        <div class="itinerary-text">仙台市區</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🛍️</div>
+                        <div class="itinerary-text">伴手禮採買 / <a href="https://maps.google.com/?q=仙台朝市" target="_blank" class="map-link">仙台朝市</a></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">⬇️</div>
+                        <div class="itinerary-text">電車 <span class="time-badge">25分</span></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">✈️</div>
+                        <div class="itinerary-text">16:05 班機起飛</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 住宿頁面 -->
+            <div id="hotels" class="tab-content">
+                <div class="section-title">🏨 住宿資訊</div>
+                
+                <div class="hotel-card">
+                    <div class="hotel-name">🌸 <a href="https://maps.google.com/?q=ホテルビスタ仙台" target="_blank" class="map-link" style="color: #333;">Vista 飯店 仙台</a></div>
+                    <div class="hotel-info">
+                        📅 <strong>住宿日期：</strong>4/12 (日)、4/13 (一)<br>
+                        🏢 <strong>日文名稱：</strong>ホテルビスタ仙台<br>
+                        🔗 <strong>預訂方式：</strong>官網預訂<br>
+                        📍 <strong>位置：</strong>仙台車站附近，交通便利
+                    </div>
+                </div>
+
+                <div class="hotel-card">
+                    <div class="hotel-name">🏔️ <a href="https://maps.google.com/?q=ダイワロイネットホテル山形駅前" target="_blank" class="map-link" style="color: #333;">山形站前大和 ROYNET 酒店</a></div>
+                    <div class="hotel-info">
+                        📅 <strong>住宿日期：</strong>4/14 (二)<br>
+                        🏢 <strong>日文名稱：</strong>ダイワロイネットホテル 山形駅前<br>
+                        🔗 <strong>預訂方式：</strong>Booking.com<br>
+                        📍 <strong>位置：</strong>山形車站前，樓下有米澤牛餐廳
+                    </div>
+                </div>
+
+                <div class="hotel-card">
+                    <div class="hotel-name">🌸 <a href="https://maps.google.com/?q=リッチモンドホテル盛岡駅前" target="_blank" class="map-link" style="color: #333;">Richmond Hotel 盛岡駅前</a></div>
+                    <div class="hotel-info">
+                        📅 <strong>住宿日期：</strong>4/15 (三)<br>
+                        🏢 <strong>日文名稱：</strong>リッチモンドホテル 盛岡駅前<br>
+                        🔗 <strong>預訂方式：</strong>Booking.com<br>
+                        📍 <strong>位置：</strong>盛岡車站前
+                    </div>
+                </div>
+
+                <div class="hotel-card">
+                    <div class="hotel-name">♨️ <a href="https://maps.google.com/?q=ドーミーイン弘前" target="_blank" class="map-link" style="color: #333;">天然溫泉 磐城櫻花之湯 Dormy Inn 弘前店</a></div>
+                    <div class="hotel-info">
+                        📅 <strong>住宿日期：</strong>4/16 (四)<br>
+                        🏢 <strong>日文名稱：</strong>ドーミーイン弘前<br>
+                        🔗 <strong>預訂方式：</strong>Booking.com<br>
+                        ♨️ <strong>特色：</strong>天然溫泉、提供宵夜拉麵<br>
+                        📍 <strong>位置：</strong>弘前市區，靠近弘前公園
+                    </div>
+                </div>
+
+                <div class="hotel-card">
+                    <div class="hotel-name">🌸 <a href="https://maps.google.com/?q=ダイワロイネットホテル仙台西口+PREMIER" target="_blank" class="map-link" style="color: #333;">Daiwa Roynet Hotel Sendai-nishiguchi PREMIER</a></div>
+                    <div class="hotel-info">
+                        📅 <strong>住宿日期：</strong>4/17 (五)<br>
+                        🏢 <strong>日文名稱：</strong>ダイワロイネットホテル仙台西口 PREMIER<br>
+                        🔗 <strong>預訂方式：</strong>Japanican<br>
+                        📍 <strong>位置：</strong>仙台車站西口
+                    </div>
+                </div>
+            </div>
+
+            <!-- 交通頁面 -->
+            <div id="transport" class="tab-content">
+                <div class="section-title">🚗 交通資訊</div>
+                
+                <div class="transport-card">
+                    <div class="transport-title">✈️ 航班資訊</div>
+                    <div class="transport-detail">
+                        <strong>去程：</strong>4/12 (日) 14:35 抵達<a href="https://maps.google.com/?q=仙台空港" target="_blank" class="map-link">仙台機場</a><br>
+                        <strong>回程：</strong>4/18 (六) 16:05 <a href="https://maps.google.com/?q=仙台空港" target="_blank" class="map-link">仙台機場</a>起飛
+                    </div>
+                </div>
+
+                <div class="transport-card">
+                    <div class="transport-title">🚃 JR 電車使用日</div>
+                    <div class="transport-detail">
+                        <strong>4/12 (日)：</strong>仙台機場 → 仙台車站 (25分)<br>
+                        <strong>4/13 (一)：</strong>仙台 ⇄ 白石川 (JR東北本線 35分，一小時兩班)<br>
+                        <strong>4/17 (五)：</strong>弘前 → 新青森 (JR奧羽本線 30分)<br>
+                        <strong>4/17 (五)：</strong>新青森 → 仙台 (新幹線 1.5小時)<br>
+                        <strong>4/18 (六)：</strong>仙台市區 → 仙台機場 (25分)
+                    </div>
+                </div>
+
+                <div class="transport-card">
+                    <div class="transport-title">🚗 租車資訊</div>
+                    <div class="transport-detail">
+                        <strong>租車天數：</strong>3天 (4/14～4/16)<br>
+                        <strong>取車地點：</strong>仙台 (4/14)<br>
+                        <strong>還車地點：</strong>弘前 Nippon rent a car (4/16 異地還車)
+                    </div>
+                    <div class="warning-box" style="margin-top: 10px;">
+                        ⚠️ <strong>重要提醒：</strong><br>
+                        • 記得攜帶台灣駕照 + 日文譯本<br>
+                        • 4/16 八幡平雪之迴廊：出發前務必確認路況與天氣
+                    </div>
+                </div>
+
+                <div class="transport-card">
+                    <div class="transport-title">🚗 每日車程統計</div>
+                    <div class="transport-detail">
+                        <strong>Day 3 (4/14)：</strong>約 2小時 50分<br>
+                        　• 仙台 → 花見山 (1h10m)<br>
+                        　• 花見山 → 山形 (1h30m)<br>
+                        <strong>Day 4 (4/15)：</strong>約 2小時 55分<br>
+                        　• 山形 → 北上 (1h40m)<br>
+                        　• 北上 → 小岩井 (45m)<br>
+                        　• 小岩井 → 盛岡 (30m)<br>
+                        <strong>Day 5 (4/16)：</strong>約 2小時 55分<br>
+                        　• 盛岡 → 八幡平 (1h15m)<br>
+                        　• 八幡平 → 弘前 (1h40m)
+                    </div>
+                </div>
+
+                <div class="transport-card">
+                    <div class="transport-title">🚌 其他交通</div>
+                    <div class="transport-detail">
+                        <strong>4/17 青森：</strong>新青森車站 ⇄ 青森縣立美術館 (公車 15分)
+                    </div>
+                </div>
+            </div>
+
+            <!-- 美食頁面 -->
+            <div id="food" class="tab-content">
+                <div class="section-title">🍴 美食清單</div>
+                
+                <div class="highlight">
+                    🥩 仙台三大牛舌名店巡禮！
+                </div>
+
+                <div class="day-card" style="background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);">
+                    <div class="day-header">
+                        <div class="day-title">🥩 <a href="https://maps.google.com/?q=牛たん司,仙台駅" target="_blank" class="map-link" style="color: #333;">牛舌司 (Gyutan Tsukasa)</a></div>
+                        <div class="day-badge">4/12 Day 1</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">📍</div>
+                        <div class="itinerary-text">仙台車站東口</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🌟</div>
+                        <div class="itinerary-text">第一餐就來品嚐仙台名物牛舌！</div>
+                    </div>
+                </div>
+
+                <div class="day-card" style="background: linear-gradient(135deg, #fab1a0 0%, #ff7675 100%);">
+                    <div class="day-header">
+                        <div class="day-title">🥩 <a href="https://maps.google.com/?q=牛たん閣,仙台" target="_blank" class="map-link" style="color: #333;">牛舌閣 (Gyutan-Kaku)</a></div>
+                        <div class="day-badge">4/13 Day 2</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">📍</div>
+                        <div class="itinerary-text">仙台市區（找一間分店）</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🌟</div>
+                        <div class="itinerary-text">白石川賞櫻後回仙台享用</div>
+                    </div>
+                </div>
+
+                <div class="day-card" style="background: linear-gradient(135deg, #ff9ff3 0%, #feca57 100%);">
+                    <div class="day-header">
+                        <div class="day-title">🥩 <a href="https://maps.google.com/?q=米沢牛登起波,山形" target="_blank" class="map-link" style="color: #333;">米澤牛 登起波 (Tokiwa)</a></div>
+                        <div class="day-badge">4/14 Day 3</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">📍</div>
+                        <div class="itinerary-text">山形站前（飯店樓下）</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">⏰</div>
+                        <div class="itinerary-text">營業至 21:00</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🌟</div>
+                        <div class="itinerary-text">品嚐頂級米澤和牛！</div>
+                    </div>
+                </div>
+
+                <div class="day-card" style="background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);">
+                    <div class="day-header">
+                        <div class="day-title">🥩 <a href="https://maps.google.com/?q=牛たん炭焼利久善治郎,仙台駅" target="_blank" class="map-link" style="color: #333;">牛舌 善治郎 (Zenjiro)</a></div>
+                        <div class="day-badge">4/17 Day 6</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">📍</div>
+                        <div class="itinerary-text">仙台車站附近</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">⏰</div>
+                        <div class="itinerary-text">營業至 22:30</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🌟</div>
+                        <div class="itinerary-text">旅程最後一頓牛舌饗宴！</div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>📝 其他餐食：</strong><br>
+                    • 各景點午餐：依現場情況選擇當地特色料理<br>
+                    • 4/18 早餐：仙台朝市新鮮海鮮<br>
+                    • Dormy Inn 弘前：有提供免費宵夜拉麵
+                </div>
+
+                <div class="warning-box">
+                    💡 <strong>美食小提示：</strong><br>
+                    • 仙台牛舌是必吃美食，建議預留足夠時間排隊<br>
+                    • 米澤牛登起波在飯店樓下，很方便但建議提早到<br>
+                    • 仙台朝市營業時間較早，記得早點起床
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            // 移除所有 active class
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // 添加 active class 到選中的標籤
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+            
+            // 滾動到頂部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
