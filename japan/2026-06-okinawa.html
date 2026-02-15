@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="沖繩之旅">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' style='stop-color:%2300d4ff'/><stop offset='100%25' style='stop-color:%2390e0ef'/></linearGradient></defs><rect width='100' height='100' fill='url(%23bg)'/><text x='50' y='60' font-size='45' text-anchor='middle' fill='white'>🌺</text></svg>">
+    <title>沖繩之旅 2025</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft JhengHei", sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #00a8e8;
+            font-size: 28px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .header .dates {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 80px;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 15px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #00a8e8;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #00a8e8 0%, #00d4ff 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 168, 232, 0.4);
+        }
+
+        .content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            min-height: 400px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .day-card {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255,255,255,0.5);
+        }
+
+        .day-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .day-badge {
+            background: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #ff6b6b;
+        }
+
+        .itinerary-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 12px;
+            align-items: flex-start;
+        }
+
+        .itinerary-icon {
+            font-size: 24px;
+            min-width: 30px;
+        }
+
+        .itinerary-text {
+            flex: 1;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .time-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.7);
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #666;
+            margin-left: 5px;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .info-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .info-detail {
+            color: #555;
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .map-link {
+            color: #00a8e8;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+
+        .map-link:hover {
+            color: #0077b6;
+            border-bottom: 2px solid #0077b6;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #00a8e8;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .food-badge {
+            display: inline-block;
+            background: #ff6b6b;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .tips-box {
+            background: #e7f5ff;
+            border-left: 4px solid #00a8e8;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .tab-btn {
+                font-size: 14px;
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌺 沖繩之旅</h1>
+            <div class="dates">2025年6月12日 - 6月16日 (5天4夜)</div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('overview')">總覽</button>
+            <button class="tab-btn" onclick="switchTab('itinerary')">行程</button>
+            <button class="tab-btn" onclick="switchTab('food')">美食</button>
+            <button class="tab-btn" onclick="switchTab('transport')">交通</button>
+            <button class="tab-btn" onclick="switchTab('tips')">注意事項</button>
+        </div>
+
+        <div class="content">
+            <!-- 總覽頁面 -->
+            <div id="overview" class="tab-content active">
+                <div class="section-title">🗺️ 行程地圖</div>
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <img src="2026沖繩之旅.jpg" alt="沖繩行程地圖" style="max-width: 100%; height: auto; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                </div>
+                
+                <div class="section-title">🗺️ 行程概要</div>
+                <div class="info-box">
+                    <strong>旅遊路線：</strong>那霸 → 本部(北部) → 恩納(中部) → 那霸<br>
+                    <strong>策略：</strong>由南往北，再由北往南的順路跑法
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-title">✈️ 航班資訊</div>
+                    <div class="info-detail">
+                        <strong>去程：</strong>6/12 (四) BR186 19:15 抵達那霸機場<br>
+                        <strong>回程：</strong>6/16 (一) BR113 10:15 起飛
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    🌊 精選景點：古宇利大橋、美麗海水族館、備瀨福木林道、美國村、港川外人住宅區<br>
+                    🌸 季節限定：饒平名繡球花園（6月藍紫色花海）
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-title">6/12 (四) Day 1</div>
+                        <div class="day-badge">那霸</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">✈️</div>
+                        <div class="itinerary-text">19:15 抵達 → 飯店 Check-in → 傑克牛排</div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-title">6/13 (五) Day 2</div>
+                        <div class="day-badge">往北移動</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🌊</div>
+                        <div class="itinerary-text">古宇利大橋 → 蝦蝦飯 → 繡球花園 → 美麗海水族館 → 本部牧場</div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-title">6/14 (六) Day 3</div>
+                        <div class="day-badge">中部漫遊</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🌳</div>
+                        <div class="itinerary-text">備瀨福木林道 → 百年古家大家 → Banta Cafe → 島豚屋</div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-title">6/15 (日) Day 4</div>
+                        <div class="day-badge">回那霸</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🎨</div>
+                        <div class="itinerary-text">美國村 → 港川外人住宅區 → 琉球茶房</div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-title">6/16 (一) Day 5</div>
+                        <div class="day-badge">返台</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">✈️</div>
+                        <div class="itinerary-text">還車 → 10:15 起飛</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 行程頁面 -->
+            <div id="itinerary" class="tab-content">
+                <div class="section-title">📅 詳細行程</div>
+                
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-title">6/12 (四) Day 1 - 抵達與休息</div>
+                        <div class="day-badge">那霸</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">✈️</div>
+                        <div class="itinerary-text">19:15 抵達<a href="https://maps.google.com/?q=那霸機場" target="_blank" class="map-link">那霸機場</a>（出關約 45-60 分鐘）</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚕</div>
+                        <div class="itinerary-text">計程車前往那霸市區飯店 <span class="time-badge">15-20分</span>（費用約 ¥2,000-2,500）</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🏨</div>
+                        <div class="itinerary-text">20:40 飯店 Check-in</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🥩</div>
+                        <div class="itinerary-text"><strong>晚餐：<a href="https://maps.google.com/?q=Jack's+Steak+House+那霸" target="_blank" class="map-link">傑克牛排 Jack's Steak House</a></strong>
+                        <span class="food-badge">網紅店</span><br>
+                        營業到深夜，沖繩美式牛排始祖，菲力牛排軟嫩適合長輩</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🏠</div>
+                        <div class="itinerary-text">住宿：那霸市區（國際通周邊）</div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-title">6/13 (五) Day 2 - 沖繩藍與繡球花</div>
+                        <div class="day-badge">往北移動</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🏢</div>
+                        <div class="itinerary-text">09:30 那霸市區取車（OTS/ORIX等）</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚗</div>
+                        <div class="itinerary-text">10:00 出發，走高速公路（西原IC - 許田IC）<span class="time-badge">1h30m</span></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🌊</div>
+                        <div class="itinerary-text"><strong>景點 1：<a href="https://maps.google.com/?q=古宇利大橋" target="_blank" class="map-link">古宇利大橋 & 古宇利島</a></strong><br>
+                        開車穿越跨海大橋，看「古宇利藍」海色<br>
+                        長輩友善：<a href="https://maps.google.com/?q=古宇利海洋塔" target="_blank" class="map-link">古宇利海洋塔</a>（搭無人電動車上山，有冷氣看海）</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🍤</div>
+                        <div class="itinerary-text"><strong>午餐：<a href="https://maps.google.com/?q=KOURI+SHRIMP+古宇利島" target="_blank" class="map-link">KOURI SHRIMP 古宇利蝦蝦飯</a></strong>
+                        <span class="food-badge">IG打卡店</span><br>
+                        蒜味濃厚超下飯，可外帶到車上吃</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚗</div>
+                        <div class="itinerary-text"><span class="time-badge">25分</span></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🌸</div>
+                        <div class="itinerary-text"><strong>景點 2：<a href="https://maps.google.com/?q=饒平名繡球花園" target="_blank" class="map-link">饒平名繡球花園</a></strong><br>
+                        6月季節限定，滿山藍紫色花海（園區有坡度，請長輩慢慢走）</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚗</div>
+                        <div class="itinerary-text"><span class="time-badge">20-25分</span></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🐋</div>
+                        <div class="itinerary-text"><strong>景點 3：<a href="https://maps.google.com/?q=沖繩美麗海水族館" target="_blank" class="map-link">沖繩美麗海水族館</a></strong><br>
+                        下午人潮較少，直奔「黑潮之海」看鯨鯊餵食秀（17:00 場次）<br>
+                        全室內冷氣，長輩體力負擔小</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚗</div>
+                        <div class="itinerary-text"><span class="time-badge">10分</span></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🥩</div>
+                        <div class="itinerary-text"><strong>晚餐：<a href="https://maps.google.com/?q=燒肉本部牧場" target="_blank" class="map-link">燒肉本部牧場 Motobu Bokujo</a></strong><br>
+                        本部牛燒肉，環境好、肉質佳</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🏠</div>
+                        <div class="itinerary-text">住宿：<a href="https://maps.google.com/?q=Hotel+Orion+Motobu" target="_blank" class="map-link">Hotel Orion Motobu</a>（就在水族館旁）</div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-title">6/14 (六) Day 3 - 綠色林道與百年老宅</div>
+                        <div class="day-badge">中部漫遊</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚗</div>
+                        <div class="itinerary-text">10:00 飯店退房，<span class="time-badge">5分</span></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🌳</div>
+                        <div class="itinerary-text"><strong>景點 1：<a href="https://maps.google.com/?q=備瀨福木林道" target="_blank" class="map-link">備瀨福木林道</a></strong><br>
+                        <strong>必搭水牛車</strong>（約 20-25 分鐘）<br>
+                        在樹蔭下聽三線琴，不用走路又能享受芬多精</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚗</div>
+                        <div class="itinerary-text"><span class="time-badge">20-25分</span></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🏛️</div>
+                        <div class="itinerary-text"><strong>午餐：<a href="https://maps.google.com/?q=百年古家大家+Ufuya" target="_blank" class="map-link">百年古家 大家 Ufuya</a></strong>
+                        <span class="food-badge">必去名店</span><br>
+                        百年木造建築吃阿古豬，氣氛無敵<br>
+                        ⚠️ <strong>務必提前訂位</strong></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚗</div>
+                        <div class="itinerary-text">往南前往恩納村/讀谷村 <span class="time-badge">50-60分</span>（沿途看海）</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">☕</div>
+                        <div class="itinerary-text"><strong>景點 2：<a href="https://maps.google.com/?q=星野集團+Banta+Cafe" target="_blank" class="map-link">星野集團 Banta Cafe</a></strong><br>
+                        建在海邊岩石上的咖啡廳<br>
+                        推薦「榻榻米區」或「室內沙發區」，點杯泡泡茶拍照，長輩可以躺著看海</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚗</div>
+                        <div class="itinerary-text"><span class="time-badge">15-20分</span></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🏨</div>
+                        <div class="itinerary-text">16:30 恩納村海濱飯店 Check-in</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚗</div>
+                        <div class="itinerary-text"><span class="time-badge">10-15分</span></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🍖</div>
+                        <div class="itinerary-text"><strong>晚餐：<a href="https://maps.google.com/?q=島豚屋+Shimabutaya" target="_blank" class="map-link">島豚屋 Shimabutaya</a></strong> 蒸阿古豬<br>
+                        或 <a href="https://maps.google.com/?q=琉球之牛+恩納" target="_blank" class="map-link">琉球之牛</a>（需預約）</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🏠</div>
+                        <div class="itinerary-text">住宿：恩納村（推薦 <a href="https://maps.google.com/?q=Sheraton+Okinawa" target="_blank" class="map-link">Sheraton</a> 或 <a href="https://maps.google.com/?q=Rizzan+Sea+Park" target="_blank" class="map-link">Rizzan Sea Park</a>）</div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-title">6/15 (日) Day 4 - 美式風情與甜點</div>
+                        <div class="day-badge">回那霸</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚗</div>
+                        <div class="itinerary-text">10:30 飯店退房，往南行駛 <span class="time-badge">30-40分</span></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🎨</div>
+                        <div class="itinerary-text"><strong>景點 1：<a href="https://maps.google.com/?q=美國村+American+Village" target="_blank" class="map-link">美國村 American Village</a></strong><br>
+                        充滿美式色彩的建築，適合拍照<br>
+                        走一下海邊步道，很舒服</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🍔</div>
+                        <div class="itinerary-text"><strong>午餐：<a href="https://maps.google.com/?q=Pork+Tamago+Onigiri+美國村" target="_blank" class="map-link">Pork Tamago Onigiri 豬肉蛋飯糰</a></strong>
+                        <span class="food-badge">必吃</span><br>
+                        或 <a href="https://maps.google.com/?q=Taco+Rice+Cafe+Kijimuna" target="_blank" class="map-link">Taco Rice Cafe Kijimuna 塔可飯</a></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚗</div>
+                        <div class="itinerary-text"><span class="time-badge">15-20分</span></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🏘️</div>
+                        <div class="itinerary-text"><strong>景點 2：<a href="https://maps.google.com/?q=港川外人住宅區" target="_blank" class="map-link">港川外人住宅區 Minatogawa Stateside Town</a></strong><br>
+                        美軍眷村改建的白色小屋群，很多文青小店</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🍰</div>
+                        <div class="itinerary-text"><strong>網紅必買：</strong><br>
+                        <a href="https://maps.google.com/?q=oHacorte+港川" target="_blank" class="map-link">oHacorte 水果塔</a>
+                        <span class="food-badge">必吃！</span><br>
+                        <a href="https://maps.google.com/?q=ippe+coppe+港川" target="_blank" class="map-link">ippe coppe 麵包</a></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚗</div>
+                        <div class="itinerary-text">返回那霸市區飯店 <span class="time-badge">20-30分</span>（週日傍晚容易塞車，建議提早出發）</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🏨</div>
+                        <div class="itinerary-text">17:00 飯店 Check-in 與還車前加油</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚗</div>
+                        <div class="itinerary-text">那霸市區內移動 <span class="time-badge">15分</span></div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🍱</div>
+                        <div class="itinerary-text"><strong>晚餐：<a href="https://maps.google.com/?q=琉球茶房+Ashibiuna" target="_blank" class="map-link">琉球茶房 Ryukyu Sabo Ashibiuna</a></strong><br>
+                        首里城附近的日式庭園餐廳，氣氛雅緻<br>
+                        長輩會非常喜歡（需預約）</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🏠</div>
+                        <div class="itinerary-text">住宿：那霸市區（推薦 <a href="https://maps.google.com/?q=JR九州+Blossom+那霸" target="_blank" class="map-link">JR九州 Blossom</a> 或 <a href="https://maps.google.com/?q=Hyatt+Regency+那霸" target="_blank" class="map-link">Hyatt Regency</a>）</div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-title">6/16 (一) Day 5 - 早班機返台</div>
+                        <div class="day-badge">返台</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🏨</div>
+                        <div class="itinerary-text">07:30 退房</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚗</div>
+                        <div class="itinerary-text">08:00 抵達租車公司還車</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">🚌</div>
+                        <div class="itinerary-text">搭接駁車前往機場 <span class="time-badge">15分</span>（上班時間車多，預留緩衝）</div>
+                    </div>
+                    <div class="itinerary-item">
+                        <div class="itinerary-icon">✈️</div>
+                        <div class="itinerary-text">10:15 起飛 (BR113)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 美食頁面 -->
+            <div id="food" class="tab-content">
+                <div class="section-title">🍴 美食清單</div>
+                
+                <div class="highlight">
+                    🌟 網紅美食 × 長輩友善 完美組合！
+                </div>
+
+                <div class="section-title" style="font-size: 18px; margin-top: 20px;">🔥 網紅打卡美食</div>
+
+                <div class="info-card">
+                    <div class="info-title">🍤 <a href="https://maps.google.com/?q=KOURI+SHRIMP+古宇利島" target="_blank" class="map-link">KOURI SHRIMP 古宇利蝦蝦飯</a></div>
+                    <div class="info-detail">
+                        📍 <strong>位置：</strong>古宇利島<br>
+                        🌟 <strong>特色：</strong>蒜味濃厚超下飯，IG打卡名店<br>
+                        💡 <strong>小提示：</strong>若沒位子可外帶到車上吃
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">🍰 <a href="https://maps.google.com/?q=oHacorte+港川" target="_blank" class="map-link">oHacorte 水果塔</a></div>
+                    <div class="info-detail">
+                        📍 <strong>位置：</strong>港川外人住宅區<br>
+                        🌟 <strong>特色：</strong>必吃！新鮮水果塔，視覺味覺雙重享受<br>
+                        💡 <strong>小提示：</strong>下午容易賣完，建議早點去
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">🍙 <a href="https://maps.google.com/?q=Pork+Tamago+Onigiri+美國村" target="_blank" class="map-link">Pork Tamago Onigiri 豬肉蛋飯糰</a></div>
+                    <div class="info-detail">
+                        📍 <strong>位置：</strong>美國村<br>
+                        🌟 <strong>特色：</strong>沖繩靈魂早餐，份量大又好吃<br>
+                        💡 <strong>小提示：</strong>當午餐也很適合
+                    </div>
+                </div>
+
+                <div class="section-title" style="font-size: 18px; margin-top: 30px;">👴 長輩友善餐廳</div>
+
+                <div class="info-card">
+                    <div class="info-title">🏛️ <a href="https://maps.google.com/?q=百年古家大家+Ufuya" target="_blank" class="map-link">百年古家 大家 Ufuya</a></div>
+                    <div class="info-detail">
+                        📍 <strong>位置：</strong>名護市<br>
+                        🌟 <strong>特色：</strong>百年木造建築吃阿古豬，氣氛無敵<br>
+                        ⚠️ <strong>重要：</strong>務必提前訂位<br>
+                        👍 <strong>長輩友善：</strong>舒適座位、精緻服務
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">🍱 <a href="https://maps.google.com/?q=琉球茶房+Ashibiuna" target="_blank" class="map-link">琉球茶房 Ryukyu Sabo Ashibiuna</a></div>
+                    <div class="info-detail">
+                        📍 <strong>位置：</strong>首里城附近<br>
+                        🌟 <strong>特色：</strong>日式庭園餐廳，氣氛雅緻<br>
+                        ⚠️ <strong>重要：</strong>需預約<br>
+                        👍 <strong>長輩友善：</strong>長輩會非常喜歡的環境
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">🥩 <a href="https://maps.google.com/?q=燒肉本部牧場" target="_blank" class="map-link">燒肉本部牧場 Motobu Bokujo</a></div>
+                    <div class="info-detail">
+                        📍 <strong>位置：</strong>本部町<br>
+                        🌟 <strong>特色：</strong>本部牛燒肉，環境好、肉質佳<br>
+                        👍 <strong>長輩友善：</strong>舒適環境，適合家庭聚餐
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">🥩 <a href="https://maps.google.com/?q=Jack's+Steak+House+那霸" target="_blank" class="map-link">傑克牛排 Jack's Steak House</a></div>
+                    <div class="info-detail">
+                        📍 <strong>位置：</strong>那霸市區<br>
+                        🌟 <strong>特色：</strong>沖繩美式牛排始祖，菲力牛排軟嫩<br>
+                        💡 <strong>小提示：</strong>營業到深夜，知名排隊店<br>
+                        👍 <strong>長輩友善：</strong>菲力牛排軟嫩適合長輩
+                    </div>
+                </div>
+
+                <div class="section-title" style="font-size: 18px; margin-top: 30px;">☕ 特色咖啡廳</div>
+
+                <div class="info-card">
+                    <div class="info-title">☕ <a href="https://maps.google.com/?q=星野集團+Banta+Cafe" target="_blank" class="map-link">星野集團 Banta Cafe</a></div>
+                    <div class="info-detail">
+                        📍 <strong>位置：</strong>讀谷村<br>
+                        🌟 <strong>特色：</strong>建在海邊岩石上的咖啡廳<br>
+                        💡 <strong>推薦：</strong>榻榻米區或室內沙發區<br>
+                        👍 <strong>長輩友善：</strong>可以躺著看海，點杯泡泡茶拍照
+                    </div>
+                </div>
+            </div>
+
+            <!-- 交通頁面 -->
+            <div id="transport" class="tab-content">
+                <div class="section-title">🚗 交通資訊</div>
+                
+                <div class="info-card">
+                    <div class="info-title">✈️ 航班資訊</div>
+                    <div class="info-detail">
+                        <strong>去程：</strong>6/12 (四) BR186 19:15 抵達<a href="https://maps.google.com/?q=那霸機場" target="_blank" class="map-link">那霸機場</a><br>
+                        <strong>回程：</strong>6/16 (一) BR113 10:15 起飛
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">🚗 租車建議</div>
+                    <div class="info-detail">
+                        <strong>取車：</strong>6/13 (五) 早上 09:30 那霸市區<br>
+                        <strong>還車：</strong>6/16 (一) 早上 08:00 那霸市區<br>
+                        <strong>總天數：</strong>3天3夜<br>
+                        <strong>推薦公司：</strong>OTS、ORIX、Times Car Rental
+                    </div>
+                    <div class="tips-box">
+                        💡 <strong>為什麼第一晚不租車？</strong><br>
+                        • 省去第一晚停車費<br>
+                        • 避免夜間取車的疲勞<br>
+                        • 計程車從機場到那霸市區只要 ¥2,000-2,500
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">🚗 每日車程統計</div>
+                    <div class="info-detail">
+                        <strong>Day 2 (6/13)：</strong>總車程約 2 小時 30 分鐘<br>
+                        　• 那霸 → 古宇利島 (1h30m)<br>
+                        　• 古宇利島 → 繡球花園 (25m)<br>
+                        　• 繡球花園 → 美麗海水族館 (20-25m)<br>
+                        　• 水族館 → 本部牧場 (10m)<br><br>
+                        
+                        <strong>Day 3 (6/14)：</strong>總車程約 1 小時 30 分鐘<br>
+                        　• 飯店 → 備瀨福木林道 (5m)<br>
+                        　• 福木林道 → 百年古家 (20-25m)<br>
+                        　• 百年古家 → 恩納村 (50-60m)<br>
+                        　• 恩納村 → Banta Cafe (15-20m)<br>
+                        　• Banta Cafe → 飯店 (15-20m)<br>
+                        　• 飯店 → 晚餐 (10-15m)<br><br>
+                        
+                        <strong>Day 4 (6/15)：</strong>總車程約 1 小時 15 分鐘<br>
+                        　• 恩納村 → 美國村 (30-40m)<br>
+                        　• 美國村 → 港川外人住宅 (15-20m)<br>
+                        　• 港川 → 那霸飯店 (20-30m)<br>
+                        　• 飯店 → 琉球茶房 (15m)
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    ⚠️ <strong>重要交通提醒：</strong><br>
+                    • Day 2 走高速公路：西原IC → 許田IC（省時舒適）<br>
+                    • Day 3 走一般道路：沿途可欣賞海景<br>
+                    • Day 4 週日傍晚：58號公路進那霸非常塞車，建議 16:00 前就開始往飯店移動<br>
+                    • 還車前記得加油：機場附近有多家加油站
+                </div>
+            </div>
+
+            <!-- 注意事項頁面 -->
+            <div id="tips" class="tab-content">
+                <div class="section-title">💡 旅遊小提示</div>
+                
+                <div class="highlight">
+                    🎯 行程設計理念：由南往北，再由北往南的順路跑法<br>
+                    每日僅安排 2 個主要大點，輕鬆不趕
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">⏰ 車程控制</div>
+                    <div class="info-detail">
+                        • 每天最長的一段車程都不超過 1.5 小時<br>
+                        • 避免長輩久坐勞累<br>
+                        • 預留充足休息時間
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">🍽️ 美食策略</div>
+                    <div class="info-detail">
+                        <strong>網紅店：</strong><br>
+                        • Kouri Shrimp (蝦飯)<br>
+                        • oHacorte (水果塔)<br>
+                        • Pork Tamago (飯糰)<br>
+                        → 滿足打卡與口味<br><br>
+                        
+                        <strong>長輩友善店：</strong><br>
+                        • 大家 Ufuya (百年古家)<br>
+                        • 琉球茶房<br>
+                        • 本部牧場<br>
+                        → 滿足舒適座位與精緻服務
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">🌸 季節特色</div>
+                    <div class="info-detail">
+                        <strong>6月限定：饒平名繡球花園</strong><br>
+                        • 滿山藍紫色花海<br>
+                        • 園區內有部分坡道<br>
+                        • 若長輩膝蓋不好，可在平地休息區賞花<br>
+                        • 不一定要爬到最高點
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">👴 長輩友善安排</div>
+                    <div class="info-detail">
+                        • <strong>古宇利海洋塔：</strong>搭無人電動車上山，有冷氣看海<br>
+                        • <strong>備瀨福木林道：</strong>必搭水牛車，不用走路<br>
+                        • <strong>美麗海水族館：</strong>全室內冷氣，下午人潮少<br>
+                        • <strong>Banta Cafe：</strong>榻榻米區可躺著看海<br>
+                        • <strong>餐廳選擇：</strong>都有舒適座位與精緻服務
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    ⚠️ <strong>特別注意事項：</strong><br><br>
+                    
+                    <strong>1. Day 4 回那霸：</strong><br>
+                    週日傍晚 58 號公路進那霸非常塞車<br>
+                    建議 16:00 左右就開始往飯店移動<br><br>
+                    
+                    <strong>2. 餐廳訂位：</strong><br>
+                    • 百年古家 大家：<strong>務必提前訂位</strong><br>
+                    • 琉球茶房：需預約<br>
+                    • 琉球之牛：需預約<br><br>
+                    
+                    <strong>3. 繡球花園：</strong><br>
+                    • 園區有坡度，請長輩慢慢走<br>
+                    • 若膝蓋不好，平地休息區賞花即可<br><br>
+                    
+                    <strong>4. 租車須知：</strong><br>
+                    • 記得攜帶台灣駕照 + 日文譯本<br>
+                    • 還車前記得加油<br>
+                    • 預留充足還車時間（至少 1.5 小時）
+                </div>
+
+                <div class="tips-box">
+                    💰 <strong>預算參考：</strong><br>
+                    • 租車 3 天：約 ¥15,000 - ¥20,000<br>
+                    • 高速公路過路費：約 ¥2,000<br>
+                    • 油資：約 ¥5,000<br>
+                    • 停車費：多數景點免費或便宜<br>
+                    • 計程車（第一晚）：約 ¥2,500
+                </div>
+
+                <div class="info-box">
+                    <strong>📱 實用 App 推薦：</strong><br>
+                    • Google Maps：導航必備<br>
+                    • Japan Connected-free Wi-Fi：免費 Wi-Fi<br>
+                    • Tabelog：餐廳評價查詢<br>
+                    • 沖繩觀光便利網：景點資訊
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            // 移除所有 active class
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // 添加 active class 到選中的標籤
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+            
+            // 滾動到頂部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
